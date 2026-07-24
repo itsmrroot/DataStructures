@@ -10,12 +10,12 @@ public  abstract class ListItem {
     }
 
      abstract ListItem next();
-     abstract void setNext(ListItem item);
+     abstract void setNext();
 
      abstract ListItem previous();
-     abstract void setPrevious(ListItem item);
+     abstract void setPrevious();
 
-     abstract int compareTo(Object other);
+     abstract int compareTo();
 
     public Object getValue() { return value; }
 
