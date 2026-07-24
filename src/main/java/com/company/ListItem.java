@@ -3,6 +3,7 @@ package com.company;
 public  abstract class ListItem {
     protected  ListItem rightLink;
     protected  ListItem leftLink;
+
     protected Object value;
 
     public ListItem(Object value) {
@@ -10,12 +11,12 @@ public  abstract class ListItem {
     }
 
      abstract ListItem next();
-     abstract void setNext();
+     abstract ListItem setNext(ListItem next);
 
-     abstract ListItem previous();
-     abstract void setPrevious();
+    abstract ListItem previous();
+     abstract ListItem setPrevious(ListItem previous);
 
-     abstract int compareTo();
+     abstract int compareTo(ListItem other);
 
     public Object getValue() { return value; }
 
