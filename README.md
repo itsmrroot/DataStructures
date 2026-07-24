@@ -6,3 +6,7 @@
 🚧 In Development
 
 *This README will be updated as the project progresses.*
+
+## 📌Learning objective
+Practice designing an abstract base class (ListItem) and implementing linked lists and binary search trees.
+Enforce sorting, insertion, and removal with compareTo, organizing data effectively.
