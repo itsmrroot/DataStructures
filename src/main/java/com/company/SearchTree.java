@@ -1,4 +1,34 @@
 package com.company;
 
-public class SearchTree {
+public class SearchTree implements NodeList {
+    ListItem root;
+
+    public SearchTree(ListItem root) {
+        this.root = root;
+    }
+    @Override
+    public ListItem getRoot() {
+        return this.root;
+    }
+
+    @Override
+    public boolean addItem(ListItem item) {
+        return false;
+    }
+
+    @Override
+    public boolean removeItem(ListItem item) {
+        return false;
+    }
+
+    @Override
+    public void traverse() {
+
+    }
+
+    public ListItem performRemoval(ListItem item1 , ListItem item2) {
+        return null;
+    }
+
+
 }
