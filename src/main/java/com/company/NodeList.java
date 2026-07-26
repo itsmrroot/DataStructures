@@ -2,9 +2,14 @@ package com.company;
 
 public interface NodeList {
 
-    void getRoot();
-    void addItem();
-    void removeItem();
+
+    ListItem getRoot();
+
+
+    boolean addItem(ListItem item);
+
+    boolean removeItem(ListItem item);
+
     void traverse();
 
 }
