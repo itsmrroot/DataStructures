@@ -29,9 +29,12 @@ public class Node extends ListItem {
     }
 
     @Override
-    int compareTo(ListItem other) {
-        Integer obj1 = (Integer) this.getValue();
-        Integer obj2 = (Integer) other.getValue();
-        return obj1.compareTo(obj2);
+    int compareTo(ListItem item) {
+
+        if (item != null) {
+            return ((String) super.getValue()).compareTo((String) item.getValue());
+        } else {
+            return -1;
+        }
     }
 }

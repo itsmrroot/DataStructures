@@ -1,7 +1,8 @@
 package com.company;
 
 public class MyLinkedList implements NodeList {
-    private ListItem root;
+
+    private ListItem root = null;
 
     public MyLinkedList(ListItem root) {
         this.root = root;
@@ -13,61 +14,72 @@ public class MyLinkedList implements NodeList {
     }
 
     @Override
-    public boolean addItem(ListItem item) {
-        if (root == null) {
-            root = item;
+    public boolean addItem(ListItem newItem) {
+
+        if (this.root == null) {
+
+            this.root = newItem;
             return true;
         }
 
-        ListItem current = root;
-        ListItem previous = null;
+        ListItem currentItem = this.root;
+        while (currentItem != null) {
+            int comparison = (currentItem.compareTo(newItem));
+            if (comparison < 0) {
 
-        while (current != null) {
-            int cmp = current.compareTo(item);
-            if (cmp == 0) return false;
-
-            if (cmp > 0) {
-                item.setNext(current);
-                if (previous == null) {
-                    root = item;
+                if (currentItem.next() != null) {
+                    currentItem = currentItem.next();
                 } else {
-                    previous.setNext(item);
+
+                    currentItem.setNext(newItem).setPrevious(currentItem);
+                    return true;
                 }
-                item.setPrevious(previous);
-                current.setPrevious(item);
+            } else if (comparison > 0) {
+
+                if (currentItem.previous() != null) {
+                    currentItem.previous().setNext(newItem).setPrevious(currentItem.previous());
+                    newItem.setNext(currentItem).setPrevious(newItem);
+                } else {
+
+                    newItem.setNext(this.root).setPrevious(newItem);
+                    this.root = newItem;
+                }
                 return true;
+            } else {
+
+                return false;
             }
-            previous = current;
-            current = current.next();
         }
-        previous.setNext(item);
-        item.setPrevious(previous);
-        return true;
+        return false;
     }
 
     @Override
     public boolean removeItem(ListItem item) {
 
-        ListItem current = root;
-        ListItem previous = null;
+        if (item != null) {
+            System.out.println("Deleting item " + item.getValue());
+        }
 
-        while (current != null) {
-            if (current.compareTo(item) == 0) {
+        ListItem currentItem = this.root;
+        while (currentItem != null) {
+            int comparison = currentItem.compareTo(item);
+            if (comparison == 0) {
 
-                if (previous == null) {
-                    root = current.next();
+                if (currentItem == this.root) {
+                    this.root = currentItem.next();
                 } else {
-                    previous.setNext(current.next());
+                    currentItem.previous().setNext(currentItem.next());
+                    if (currentItem.next() != null) {
+                        currentItem.next().setPrevious(currentItem.previous());
+                    }
                 }
-
-                if (current.next() != null) {
-                    current.next().setPrevious(previous);
-                }
-
                 return true;
+            } else if (comparison < 0) {
+                currentItem = currentItem.next();
+            } else {
+
+                return false;
             }
-            previous = current;
-            current = current.next();
         }
 
         return false;
@@ -75,14 +87,14 @@ public class MyLinkedList implements NodeList {
 
     @Override
     public void traverse(ListItem root) {
+
         if (root == null) {
             System.out.println("The list is empty");
-            return;
-        }
-        ListItem current = root;
-        while (current != null) {
-            System.out.println(current.getValue());
-            current = current.next();
+        } else {
+            while (root != null) {
+                System.out.println(root.getValue());
+                root = root.next();
+            }
         }
     }
 }

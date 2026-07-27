@@ -1,7 +1,7 @@
 package com.company;
-
 public class SearchTree implements NodeList {
-    private ListItem root;
+
+    private ListItem root = null;
 
     public SearchTree(ListItem root) {
         this.root = root;
@@ -13,95 +13,127 @@ public class SearchTree implements NodeList {
     }
 
     @Override
-    public boolean addItem(ListItem item) {
+    public boolean addItem(ListItem newItem) {
 
         if (this.root == null) {
-            this.root = item;
+
+            this.root = newItem;
             return true;
         }
 
-        ListItem current = this.root;
 
-        while (true) {
-            int cmp = current.compareTo(item);
+        ListItem currentItem = this.root;
+        while (currentItem != null) {
+            int comparison = (currentItem.compareTo(newItem));
+            if (comparison < 0) {
 
-            if (cmp == 0) {
+                if (currentItem.next() != null) {
+                    currentItem = currentItem.next();
+                } else {
+
+                    currentItem.setNext(newItem);
+                    return true;
+                }
+            } else if (comparison > 0) {
+
+                if (currentItem.previous() != null) {
+                    currentItem = currentItem.previous();
+                } else {
+
+                    currentItem.setPrevious(newItem);
+                    return true;
+                }
+            } else {
+
+                System.out.println(newItem.getValue() + " is already present");
                 return false;
             }
-            if (cmp > 0) {
-                if (current.previous() == null) {
-                    current.setPrevious(item);
-                    return true;
-                }
-                current = current.previous();
-            } else {
-                if (current.next() == null) {
-                    current.setNext(item);
-                    return true;
-                }
-                current = current.next();
-            }
-        }
-    }
-
-    @Override
-    public boolean removeItem(ListItem item) {
-
-        ListItem current = root;
-        ListItem parent = null;
-
-        while (current != null) {
-            int cmp = current.compareTo(item);
-
-            if (cmp == 0) {
-                performRemoval(current, parent);
-                return true;
-            }
-
-            parent = current;
-            current = (cmp > 0) ? current.previous() : current.next();
         }
 
         return false;
     }
 
+    @Override
+    public boolean removeItem(ListItem item) {
+
+        if (item != null) {
+            System.out.println("Deleting item " + item.getValue());
+        }
+        ListItem currentItem = this.root;
+        ListItem parentItem = currentItem;
+
+        while (currentItem != null) {
+            int comparison = (currentItem.compareTo(item));
+            if (comparison < 0) {
+                parentItem = currentItem;
+                currentItem = currentItem.next();
+            } else if (comparison > 0) {
+                parentItem = currentItem;
+                currentItem = currentItem.previous();
+            } else {
+
+                performRemoval(currentItem, parentItem);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     private void performRemoval(ListItem item, ListItem parent) {
 
+        if (item.next() == null) {
 
-        if (item.previous() != null && item.next() != null) {
+            if (parent.next() == item) {
 
-            ListItem successorParent = item;
-            ListItem successor = item.next();
+                parent.setNext(item.previous());
+            } else if (parent.previous() == item) {
 
-            while (successor.previous() != null) {
-                successorParent = successor;
-                successor = successor.previous();
+                parent.setPrevious(item.previous());
+            } else {
+
+                this.root = item.previous();
+            }
+        } else if (item.previous() == null) {
+
+            if (parent.next() == item) {
+
+                parent.setNext(item.next());
+            } else if (parent.previous() == item) {
+
+                parent.setPrevious(item.next());
+            } else {
+
+                this.root = item.next();
+            }
+        } else {
+
+            ListItem current = item.next();
+            ListItem leftmostParent = item;
+            while (current.previous() != null) {
+                leftmostParent = current;
+                current = current.previous();
             }
 
-            item.setValue(successor.getValue());
-            performRemoval(successor, successorParent);
-            return;
-        }
+            item.setValue(current.getValue());
 
+            if (leftmostParent == item) {
 
-        ListItem child = (item.previous() != null) ? item.previous() : item.next();
+                item.setNext(current.next());
+            } else {
 
-        if (parent == null) {
-            root = child;
-        } else if (parent.previous() == item) {
-            parent.setPrevious(child);
-        } else {
-            parent.setNext(child);
+                leftmostParent.setPrevious(current.next());
+            }
         }
     }
 
     @Override
     public void traverse(ListItem root) {
-        if (root == null) {
-            return;
+
+        if (root != null) {
+            traverse(root.previous());
+            System.out.println(root.getValue());
+            traverse(root.next());
         }
-        traverse(root.previous());
-        System.out.println(root.getValue());
-        traverse(root.next());
     }
 }
