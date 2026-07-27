@@ -32,7 +32,6 @@ public class Node extends ListItem {
     int compareTo(ListItem other) {
         Integer obj1 = (Integer) this.getValue();
         Integer obj2 = (Integer) other.getValue();
-
         return obj1.compareTo(obj2);
     }
 }

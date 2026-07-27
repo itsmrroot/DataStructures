@@ -1,16 +1,11 @@
 package com.company;
 
-
-import java.util.LinkedList;
-
-public class MyLinkedList  implements NodeList{
-    ListItem root;
-    LinkedList<ListItem> list = new LinkedList<>();
+public class MyLinkedList implements NodeList {
+    private ListItem root;
 
     public MyLinkedList(ListItem root) {
         this.root = root;
     }
-
 
     @Override
     public ListItem getRoot() {
@@ -19,39 +14,75 @@ public class MyLinkedList  implements NodeList{
 
     @Override
     public boolean addItem(ListItem item) {
-
-        if ((list.isEmpty())){
-            list.addFirst(item);
+        if (root == null) {
+            root = item;
             return true;
         }
-        if (list.contains(item)) {
-            return false;
+
+        ListItem current = root;
+        ListItem previous = null;
+
+        while (current != null) {
+            int cmp = current.compareTo(item);
+            if (cmp == 0) return false;
+
+            if (cmp > 0) {
+                item.setNext(current);
+                if (previous == null) {
+                    root = item;
+                } else {
+                    previous.setNext(item);
+                }
+                item.setPrevious(previous);
+                current.setPrevious(item);
+                return true;
+            }
+            previous = current;
+            current = current.next();
         }
-        if(list.indexOf(item)< list.size()){
-            list.addFirst(item);
-            return true;
-
-        }
-        list.add(item);
-
-
-
-        return false;
+        previous.setNext(item);
+        item.setPrevious(previous);
+        return true;
     }
 
     @Override
     public boolean removeItem(ListItem item) {
-        if (list.contains(item)) {
-            list.remove(item);
-            return true;
+
+        ListItem current = root;
+        ListItem previous = null;
+
+        while (current != null) {
+            if (current.compareTo(item) == 0) {
+
+                if (previous == null) {
+                    root = current.next();
+                } else {
+                    previous.setNext(current.next());
+                }
+
+                if (current.next() != null) {
+                    current.next().setPrevious(previous);
+                }
+
+                return true;
+            }
+            previous = current;
+            current = current.next();
         }
 
         return false;
     }
 
-
     @Override
-    public void traverse() {
-
+    public void traverse(ListItem root) {
+        if (root == null) {
+            System.out.println("The list is empty");
+            return;
+        }
+        ListItem current = root;
+        while (current != null) {
+            System.out.println(current.getValue());
+            current = current.next();
+        }
     }
 }
